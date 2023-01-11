@@ -19,6 +19,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['react', '@typescript-eslint'],
   rules: {
+    'no-use-before-define': 'off',
     'react/function-component-definition': 'off',
     'import/no-extraneous-dependencies': 'off',
     'no-unused-expressions': 'off',
