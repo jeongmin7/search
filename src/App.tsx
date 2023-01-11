@@ -1,8 +1,14 @@
 import React from 'react';
 import './App.css';
+import GlobalStyle from './styles/GlobalStyle';
 
-function App() {
-  return <div>typescript</div>;
-}
+const App: React.FC = () => {
+  return (
+    <div>
+      <GlobalStyle />
+      타입스크립트
+    </div>
+  );
+};
 
 export default App;
