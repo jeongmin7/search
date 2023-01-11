@@ -6,12 +6,14 @@ import styled from 'styled-components';
 import getData from '../apis';
 import Loading from './Loading';
 import AutoCompleteItem from './autoComplete/AutoCompleteItem';
+import useDebounce from '../hooks/useDebounce';
 
 const SearchBar: React.FC = () => {
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [data, setData] = useState([]);
+  const [searchedData, setSearchedData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   const search = () => {
     setIsSearch(true);
   };
@@ -19,10 +21,14 @@ const SearchBar: React.FC = () => {
   const getSearchTermHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
+  const { debounceValue } = useDebounce(searchTerm);
   useEffect(() => {
-    setData([]);
-    searchTerm && getData(searchTerm).then(res => setData(res));
-  }, [searchTerm]);
+    if (!debounceValue) {
+      setSearchedData([]);
+    }
+    getData(debounceValue).then(res => setSearchedData(res));
+  }, [debounceValue]);
+
   return (
     <Wrapper>
       <SearchWrapper>
@@ -45,8 +51,13 @@ const SearchBar: React.FC = () => {
           <BsSearch />
         </Button>
         {isLoading && <Loading />}
-        {isSearch && <AutoCompleteItem data={data} searchTerm={searchTerm} />}
       </SearchWrapper>
+      {isSearch && (
+        <AutoCompleteItem
+          searchedData={searchedData}
+          searchTerm={debounceValue}
+        />
+      )}
     </Wrapper>
   );
 };

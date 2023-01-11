@@ -1,25 +1,34 @@
 /* eslint-disable */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import EmptyResult from './EmptyResult';
 import { Sick } from '../../types';
 
 type Props = {
   searchTerm: string | undefined;
-  data: Sick[];
+  searchedData: Sick[];
 };
 const AutoCompleteItem = (props: Props) => {
-  const { data, searchTerm } = props;
-  console.log(data);
+  const { searchedData, searchTerm } = props;
+  const [suggested, setSuggested] = useState<Sick[]>([]);
+
+  const filteredData = () => {
+    setSuggested(searchedData);
+
+    if (searchedData.length > 8) {
+      setSuggested(searchedData.slice(0, 8));
+    }
+  };
+
+  useEffect(filteredData, [searchTerm, searchedData]);
   return (
     <div onClick={() => {}} onMouseDown={e => e.preventDefault()}>
       <p>추천 검색어</p>
-      {data.map(item => (
-        <div>{item.sickNm}</div>
-      ))}
+      {!searchTerm && <div>검색어를 입력해주세요</div>}
+      {searchTerm && suggested.length === 0 && <EmptyResult />}
+      {searchTerm &&
+        suggested.map(item => <div key={item.sickCd}>{item.sickNm}</div>)}
     </div>
   );
-
-  // );
-  // };
 };
 
 export default AutoCompleteItem;
