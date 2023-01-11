@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+/* eslint-disable */
+import React, { useEffect, useState } from 'react';
 import { BsSearch } from 'react-icons/bs';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import styled from 'styled-components';
+import getData from '../apis';
+import Loading from './Loading';
+import AutoCompleteItem from './autoComplete/AutoCompleteItem';
 
 const SearchBar: React.FC = () => {
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
-
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const search = () => {
     setIsSearch(true);
   };
@@ -14,7 +19,10 @@ const SearchBar: React.FC = () => {
   const getSearchTermHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
-
+  useEffect(() => {
+    setData([]);
+    searchTerm && getData(searchTerm).then(res => setData(res));
+  }, [searchTerm]);
   return (
     <Wrapper>
       <SearchWrapper>
@@ -36,6 +44,8 @@ const SearchBar: React.FC = () => {
         <Button type="button">
           <BsSearch />
         </Button>
+        {isLoading && <Loading />}
+        {isSearch && <AutoCompleteItem data={data} searchTerm={searchTerm} />}
       </SearchWrapper>
     </Wrapper>
   );
