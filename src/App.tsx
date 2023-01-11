@@ -1,12 +1,13 @@
 import React from 'react';
 import './App.css';
+import SearchPage from './pages/SearchPage';
 import GlobalStyle from './styles/GlobalStyle';
 
 const App: React.FC = () => {
   return (
     <div>
       <GlobalStyle />
-      타입스크립트
+      <SearchPage />
     </div>
   );
 };
