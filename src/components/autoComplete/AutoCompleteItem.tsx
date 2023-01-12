@@ -21,14 +21,17 @@ const AutoCompleteItem = (props: Props) => {
       <ContentWrapper>
         <Title>추천 검색어</Title>
         <ul ref={autoRef}>
-          {!searchTerm && <div>검색어를 입력해주세요</div>}
-          {searchTerm && suggested.length === 0 && <EmptyResult />}
-          {searchTerm &&
+          {!searchTerm ? (
+            <div>검색어를 입력해주세요</div>
+          ) : suggested.length === 0 ? (
+            <EmptyResult />
+          ) : (
             suggested.map((item, idx) => (
               <Item key={item.sickCd} isActive={activeIdx === idx}>
                 <HighlightedText data={item.sickNm} searchTerm={searchTerm} />
               </Item>
-            ))}
+            ))
+          )}
         </ul>
       </ContentWrapper>
     </Wrapper>
