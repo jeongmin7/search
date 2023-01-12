@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from 'react';
+import { Sick } from '../types/index';
 
 const ARROW_DOWN = 'ArrowDown';
 const ARROW_UP = 'ArrowUp';
 const ESCAPE = 'Escape';
 
 const useKeyDown = (
-  items: Array<any>,
+  data: Sick[],
 ): [number, (e: React.KeyboardEvent<HTMLInputElement>) => void] => {
   const [activeIdx, setActiveIdx] = useState(0);
 
@@ -14,11 +15,11 @@ const useKeyDown = (
       switch (e.key) {
         case ARROW_DOWN:
           setActiveIdx(idx => idx + 1);
-          if (activeIdx === items.length - 1) setActiveIdx(0);
+          if (activeIdx === data.length - 1) setActiveIdx(0);
           break;
         case ARROW_UP:
           setActiveIdx(idx => idx - 1);
-          if (activeIdx <= 0) setActiveIdx(items.length - 1);
+          if (activeIdx <= 0) setActiveIdx(data.length - 1);
           break;
         case ESCAPE:
           setActiveIdx(-1);
@@ -27,7 +28,7 @@ const useKeyDown = (
           setActiveIdx(-1);
       }
     },
-    [items, activeIdx],
+    [data, activeIdx],
   );
 
   return [activeIdx, handleKeyArrow];
