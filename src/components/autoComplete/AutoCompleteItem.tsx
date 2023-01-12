@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import EmptyResult from './EmptyResult';
 import { Sick } from '../../types';
+import HighlightedText from './HighlightText';
 
 type Props = {
   searchTerm: string | undefined;
@@ -26,7 +27,11 @@ const AutoCompleteItem = (props: Props) => {
       {!searchTerm && <div>검색어를 입력해주세요</div>}
       {searchTerm && suggested.length === 0 && <EmptyResult />}
       {searchTerm &&
-        suggested.map(item => <div key={item.sickCd}>{item.sickNm}</div>)}
+        suggested.map(item => (
+          <div key={item.sickCd}>
+            <HighlightedText data={item.sickNm} searchTerm={searchTerm} />
+          </div>
+        ))}
     </div>
   );
 };
