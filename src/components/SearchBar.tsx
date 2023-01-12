@@ -42,7 +42,6 @@ const SearchBar: React.FC = () => {
     getData(debounceValue).then(res => setSearchedData(res));
   }, [debounceValue]);
 
-  console.log(suggested, 111);
   return (
     <Wrapper>
       <SearchWrapper>
