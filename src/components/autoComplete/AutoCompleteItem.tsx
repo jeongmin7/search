@@ -15,13 +15,13 @@ const AutoCompleteItem = (props: Props) => {
 
   const filteredData = () => {
     setSuggested(searchedData);
-
     if (searchedData.length > 8) {
       setSuggested(searchedData.slice(0, 8));
     }
   };
 
   useEffect(filteredData, [searchTerm, searchedData]);
+
   return (
     <Wrapper onClick={() => {}} onMouseDown={e => e.preventDefault()}>
       <ContentWrapper>
@@ -30,9 +30,13 @@ const AutoCompleteItem = (props: Props) => {
           {!searchTerm && <div>검색어를 입력해주세요</div>}
           {searchTerm && suggested.length === 0 && <EmptyResult />}
           {searchTerm &&
-            suggested.map(item => (
-              <div key={item.sickCd}>
-                <HighlightedText data={item.sickNm} searchTerm={searchTerm} />
+            suggested.map((item, idx) => (
+              <div key={idx}>
+                <HighlightedText
+                  idx={idx}
+                  data={item.sickNm}
+                  searchTerm={searchTerm}
+                />
               </div>
             ))}
         </Content>

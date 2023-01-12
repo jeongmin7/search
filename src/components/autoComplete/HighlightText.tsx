@@ -4,9 +4,10 @@ import styled from 'styled-components';
 interface Props {
   data: string;
   searchTerm: string;
+  idx: number;
 }
 
-const HighlightedText = ({ data, searchTerm }: Props) => {
+const HighlightedText = ({ data, searchTerm, idx }: Props) => {
   const boldStartIndex = data.toLowerCase().indexOf(searchTerm.toLowerCase());
   const boldEndIndex =
     data.toLowerCase().indexOf(searchTerm.toLowerCase()) + searchTerm.length;
