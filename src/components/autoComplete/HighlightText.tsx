@@ -23,6 +23,5 @@ const HighlightedText = ({ data, searchTerm }: Props) => {
 export default HighlightedText;
 
 const Highlighted = styled.span`
-  font-size: 16px;
-  font-weight: 900;
+  font-weight: 700;
 `;
