@@ -4,24 +4,37 @@ import { BsSearch } from 'react-icons/bs';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import styled from 'styled-components';
 import getData from '../apis';
-import Loading from './Loading';
 import AutoCompleteItem from './autoComplete/AutoCompleteItem';
 import useDebounce from '../hooks/useDebounce';
+import useKeyDown from '../hooks/useKeyDown';
+import { Sick } from '../types';
+import { useRecoilState } from 'recoil';
+import dataState from '../recoil/limitedData';
 
 const SearchBar: React.FC = () => {
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchedData, setSearchedData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [suggested, setSuggested] = useRecoilState<Sick[]>(dataState);
+  const [activeIdx, handleKeyArrow] = useKeyDown(suggested || []);
+
+  const filteredData = () => {
+    setSuggested(searchedData);
+    if (searchedData.length > 8) {
+      setSuggested(searchedData.slice(0, 6));
+    }
+  };
+
+  useEffect(filteredData, [searchTerm, searchedData]);
 
   const search = () => {
     setIsSearch(true);
   };
-
   const getSearchTermHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
   const { debounceValue } = useDebounce(searchTerm);
+
   useEffect(() => {
     if (!debounceValue) {
       setSearchedData([]);
@@ -29,6 +42,7 @@ const SearchBar: React.FC = () => {
     getData(debounceValue).then(res => setSearchedData(res));
   }, [debounceValue]);
 
+  console.log(suggested, 111);
   return (
     <Wrapper>
       <SearchWrapper>
@@ -42,6 +56,7 @@ const SearchBar: React.FC = () => {
               search();
             }}
             onChange={getSearchTermHandler}
+            onKeyDown={handleKeyArrow}
           />
           {isSearch && (
             <AiFillCloseCircle style={{ fontSize: '1rem', color: '#A6AFB7' }} />
@@ -50,13 +65,9 @@ const SearchBar: React.FC = () => {
         <Button type="button">
           <BsSearch />
         </Button>
-        {isLoading && <Loading />}
       </SearchWrapper>
       {isSearch && (
-        <AutoCompleteItem
-          searchedData={searchedData}
-          searchTerm={debounceValue}
-        />
+        <AutoCompleteItem searchTerm={debounceValue} activeIdx={activeIdx} />
       )}
     </Wrapper>
   );
