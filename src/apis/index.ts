@@ -5,7 +5,7 @@ const getData = async (keyword: string) => {
     const cacheStorage = await caches.open('sick');
     const cachedResponse = await cacheStorage.match(keyword);
     if (!cachedResponse) {
-      console.info('calling api');
+      console.info('calling api!');
       const response = await axios.get(`${process.env.REACT_APP_BASE_URL}`, {
         params: {
           q: keyword,
